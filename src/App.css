@@ -59,6 +59,12 @@ input[type="submit"] {
     cursor: pointer;
 }
 
+input[type="submit"]:hover {
+    background-color: #596371;
+    transition: .5s;
+    border-color: #596371;
+}
+
 .todo-list {
     padding: 0 1em 2em;
     margin: 1em 2em;
@@ -75,6 +81,7 @@ input[type="submit"] {
 .todo {
     border-bottom: 1px solid #444;
     padding: 1em 0;
+    text-align: center;
 }
 
 .todo h3 {
@@ -83,11 +90,11 @@ input[type="submit"] {
 
 .todo-done {
     text-decoration: line-through;
-    color: rgb(240, 98, 146);
+    color: rgb(0, 237, 83);
 }
 
 .todo p {
-    text-align: left;
+    text-align: center;
     font-style: italic;
     font-size: .7em;
     margin-bottom: 1.5em;
@@ -100,6 +107,10 @@ input[type="submit"] {
     transition: .5s;
 }
 
+.trash {
+    color: #b62d2d;
+}
+
 .todo svg:hover {
-    color: #ff75e7;
+    color: #f47515;
 }

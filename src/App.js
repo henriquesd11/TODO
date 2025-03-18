@@ -51,7 +51,7 @@ function App() {
         setTime("")
     }
 
-    async function handleDelete(id)
+    async function handleDelete(id: number)
     {
         await fetch(API + "/todos/" + id, {
             method: "DELETE"
@@ -64,6 +64,21 @@ function App() {
         return (
             <p>Carregando...</p>
         );
+    }
+
+    async function handleEndit(todo)
+    {
+        todo.done = !todo.done;
+
+        const data = await fetch(API + "/todos/" + todo.id, {
+            method: "PUT",
+            body: JSON.stringify(todo),
+            headers: {
+                "Content-type": "application-json"
+            }
+        })
+
+        setTodos(prevState => prevState.map((t) => (t.id === data.id) ? (t = data) : t));
     }
 
     return (
@@ -103,13 +118,15 @@ function App() {
             { todos.length <= 0 && <p>Não há tarefas!</p>}
             {todos.map((todo) => (
                 <div className="todo" key={todo.id}>
-                    <h3 className={todo.done ? "todo-done": ""}>{todo.title}</h3>
-                    <p>Duração: {todo.time}</p>
-                    <div className="action">
-                        <span>
-                            {!todo.done ? <BsBookmarkCheck /> : <BsBookmarkCheckFill />}
+                    <div className="list">
+                        <h3 className={todo.done ? "todo-done" : ""}>{todo.title}</h3>
+                        <p>Duração: {todo.time}</p>
+                        <div className="action">
+                        <span onClick={() => handleEndit(todo)}>
+                            {!todo.done ? <BsBookmarkCheck/> : <BsBookmarkCheckFill/>}
                         </span>
-                        <BsTrash onClick={() => handleDelete(todo.id)}/>
+                            <BsTrash className="trash" tooltip="Remover" onClick={() => handleDelete(todo.id)}/>
+                        </div>
                     </div>
                 </div>
             ))}
