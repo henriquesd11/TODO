@@ -1,6 +1,7 @@
 import './App.css';
-import {useState, useEffect, use} from "react";
+import {useState, useEffect} from "react";
 import {BsTrash, BsBookmarkCheck, BsBookmarkCheckFill} from 'react-icons/bs'
+import {Table, Button, InputGroup, Form} from 'react-bootstrap'
 
 const API = "http://localhost:5000";
 function App() {
@@ -51,7 +52,7 @@ function App() {
         setTime("")
     }
 
-    async function handleDelete(id: number)
+    async function handleDelete(id)
     {
         await fetch(API + "/todos/" + id, {
             method: "DELETE"
@@ -86,50 +87,72 @@ function App() {
         <div className="header-todo">
             <h1>React Todo</h1>
         </div>
-        <div className="form-todo">
+        <div className="form-todo text-left">
             <h2>Insira sua tarefa:</h2>
             <form onSubmit={handleSubmit}>
-                <div className="form-control">
-                    <label htmlFor="title">O que vai fazer?</label>
-                    <input
-                        type="text"
-                        name="title"
+                <Form.Group>
+                    <Form.Label> Tarefa </Form.Label>
+                    <Form.Control
                         placeholder="Titulo da tarefa"
+                        aria-label="titulo"
+                        aria-describedby="basic-addon1"
                         onChange={(e) => setTitle(e.target.value)}
                         value={title || ""}
-                        required/>
-                </div>
-                <div className="form-control">
-                    <label htmlFor="time">Duração</label>
-                    <input
-                        type="text"
-                        name="time"
-                        placeholder="Tempo estimado (em horas)"
-                        onChange={(e) => setTime(e.target.value)}
-                        value={time || ""}
                         required
                     />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Duração</Form.Label>
+                    <InputGroup className="mb-3">
+                        <Form.Control
+                            placeholder="Tempo estimado (em horas)"
+                            aria-label="time"
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => setTime(e.target.value)}
+                            value={time || ""}
+                            required
+                        />
+                    </InputGroup>
+                </Form.Group>
+                <div className="d-grid gap-2">
+                    <Button
+                        variant="secondary"
+                        type="submit">Salvar</Button>
                 </div>
-                <input type="submit" value="Enviar"/>
             </form>
         </div>
         <div className="list-todo">
             <h2>Lista de Tarefas:</h2>
-            { todos.length <= 0 && <p>Não há tarefas!</p>}
-            {todos.map((todo) => (
-                <div className="todo" key={todo.id}>
-                    <div className="list">
-                        <h3 className={todo.done ? "todo-done" : ""}>{todo.title}</h3>
-                        <p>Duração: {todo.time}</p>
-                        <div className="action">
+            {todos.length <= 0 && <p>Não há tarefas!</p>}
+            <Table>
+                <thead className="text-center">
+                <tr>
+                    <th>Tarefa</th>
+                    <th>Duração</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody className="text-center">
+                {todos.map((todo) => (
+                    <tr key={todo.id}>
+                        <td className={todo.done ? "todo-done": ""}>
+                            {todo.title}
+                        </td>
+                        <td>
+                            {todo.time}
+                        </td>
+                        <td>
                         <span onClick={() => handleEndit(todo)}>
                             {!todo.done ? <BsBookmarkCheck/> : <BsBookmarkCheckFill/>}
                         </span>
                             <BsTrash className="trash" tooltip="Remover" onClick={() => handleDelete(todo.id)}/>
-                        </div>
-                    </div>
-                </div>
-            ))}
+                            <span/>
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </Table>
         </div>
     </div>
     );
